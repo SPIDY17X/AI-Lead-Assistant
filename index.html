@@ -221,7 +221,7 @@ function goToChat() {
     return;
   }
 
-  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.com$/;
+ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     alert("Enter a valid email (must include @ and .com)");
     return;
