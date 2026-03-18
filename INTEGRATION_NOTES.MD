@@ -403,7 +403,5 @@ NODE_ENV=production
 
 ---
 
-*Document prepared for: RealtyAssistant AI — Full Stack Developer Assignment*
-*Tech Stack: Node.js, Express, HTML, CSS, JavaScript*
-*Live Demo: [Netlify URL]*
-*GitHub: [GitHub URL]*
+
+
