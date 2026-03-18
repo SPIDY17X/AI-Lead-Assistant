@@ -3,57 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RealtyAssistant – Chat</title>
+<title>RealtyAssistant — AI Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0a0a0a, #1a0f2e);
+    font-family: 'Outfit', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0d0a1e 100%);
     color: white;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 30px 16px;
+    padding: 18px 14px 28px;
+    position: relative; overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 65%);
+    top: -150px; right: -150px; pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed; width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 65%);
+    bottom: -120px; left: -120px; pointer-events: none;
   }
 
-  .header { text-align: center; margin-bottom: 20px; }
-  .header h1 {
-    font-size: 30px;
-    background: linear-gradient(90deg, #c084fc, #a855f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  /* ── TOPBAR ── */
+  .topbar {
+    width: 100%; max-width: 700px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+    animation: fadeDown 0.4s ease both;
   }
-  .header p { color: #c4b5fd; margin-top: 5px; font-size: 14px; }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .t-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(145deg, #1a0a2e, #2d1060);
+    border: 1.5px solid rgba(168,85,247,0.55);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 14px rgba(168,85,247,0.55), 0 0 28px rgba(168,85,247,0.2), inset 0 0 8px rgba(168,85,247,0.1);
+    flex-shrink: 0;
+  }
+  .t-icon svg {
+    width: 22px; height: 22px;
+    filter: drop-shadow(0 0 5px rgba(168,85,247,1));
+  }
+  .t-name {
+    font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+    background: linear-gradient(90deg, #e9d5ff, #a855f7);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .t-badge {
+    font-size: 9px; padding: 2px 8px; border-radius: 20px;
+    background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.25);
+    color: #a855f7; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .topbar-right { text-align: right; }
+  .t-lead-id { font-size: 11px; color: #a855f7; font-family: monospace; }
+  .t-phone { font-size: 10px; color: #4a3570; font-family: monospace; margin-top: 1px; }
 
+  /* ── LEAD STRIP ── */
   .lead-strip {
-    display: flex; align-items: center; gap: 18px;
-    background: rgba(168,85,247,0.08);
-    border: 1px solid rgba(168,85,247,0.2);
-    border-radius: 14px; padding: 10px 18px;
-    margin-bottom: 18px; font-size: 13px;
-    color: #c4b5fd; flex-wrap: wrap; justify-content: center;
-    width: 100%; max-width: 680px;
+    width: 100%; max-width: 700px;
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    background: rgba(168,85,247,0.06);
+    border: 1px solid rgba(168,85,247,0.15);
+    border-radius: 13px; padding: 10px 16px;
+    margin-bottom: 13px; font-size: 12px; color: #c4b5fd;
+    flex-wrap: wrap; animation: fadeDown 0.45s ease both;
   }
   .lead-strip span { display: flex; align-items: center; gap: 5px; }
-  .lead-strip b { color: white; }
+  .lead-strip b { color: white; font-weight: 600; }
 
+  /* ── STEPS ── */
   .steps-wrap {
-    width: 100%; max-width: 680px;
-    margin-bottom: 18px;
-    overflow-x: auto; scrollbar-width: none;
+    width: 100%; max-width: 700px;
+    margin-bottom: 13px; overflow-x: auto; scrollbar-width: none;
+    animation: fadeDown 0.5s ease both;
   }
   .steps-wrap::-webkit-scrollbar { display: none; }
-  .steps { display: flex; align-items: center; min-width: max-content; }
+  .steps { display: flex; align-items: center; min-width: max-content; padding: 2px 2px; }
   .step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
   .step-circle {
-    width: 30px; height: 30px; border-radius: 50%;
-    background: #1a1030; border: 2px solid #3d2a6b;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #1a1030; border: 1.5px solid #3d2a6b;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #6b47a8;
-    transition: all 0.35s ease;
+    font-size: 10px; font-weight: 700; color: #6b47a8;
+    transition: all 0.3s ease; flex-shrink: 0;
   }
   .step.done .step-circle {
     background: #a855f7; border-color: #a855f7; color: black;
@@ -65,63 +104,52 @@
     box-shadow: 0 0 14px rgba(192,132,252,0.6);
   }
   .step-lbl {
-    font-size: 9px; color: #6b47a8; white-space: nowrap;
-    letter-spacing: 0.04em; font-weight: 600; text-transform: uppercase;
+    font-size: 8px; color: #4a3070; white-space: nowrap;
+    letter-spacing: 0.05em; font-weight: 600; text-transform: uppercase;
   }
-  .step.done .step-lbl, .step.active .step-lbl { color: #c4b5fd; }
+  .step.done .step-lbl { color: #c4b5fd; }
   .step.active .step-lbl { color: #c084fc; }
   .step-line {
-    width: 38px; height: 2px; background: #2a1a4a;
-    margin-bottom: 15px; flex-shrink: 0; transition: background 0.35s;
+    width: 34px; height: 1.5px; background: #2a1a4a;
+    margin-bottom: 14px; flex-shrink: 0; transition: background 0.3s;
   }
   .step-line.done { background: #a855f7; }
 
-  /* ── MOBILE FIXES ── */
-  @media (max-width: 480px) {
-    body { padding: 16px 10px; }
-    .steps-wrap { padding: 0 8px; }
-    .step-circle { width: 26px; height: 26px; font-size: 10px; }
-    .step-line { width: 20px; }
-    .lead-strip { font-size: 11px; gap: 8px; padding: 8px 10px; }
-    .messages { padding: 12px 8px; height: 360px; }
-    .msg-row { gap: 6px; }
-    .msg-wrap { max-width: 82%; }
-    .msg-av { width: 26px; height: 26px; font-size: 11px; }
-    .options-row { padding: 4px 0 2px 32px; gap: 6px; }
-    .opt { font-size: 12px; padding: 5px 10px; }
-    .input-bar { padding: 10px 8px; gap: 6px; }
-    .input-bar input { padding: 9px 12px; font-size: 13px; }
-    .agent-bar { padding: 10px 12px; }
-    .bubble { font-size: 13px; padding: 9px 12px; }
-    .mic-btn { width: 36px; height: 36px; font-size: 15px; }
-    .send-btn { width: 36px; height: 36px; font-size: 14px; }
-  }
-
-  .card {
-    width: 100%; max-width: 680px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    box-shadow: 0 0 40px rgba(168,85,247,0.25);
+  /* ── CHAT CARD ── */
+  .chat-card {
+    width: 100%; max-width: 700px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(24px);
     border: 1px solid rgba(168,85,247,0.15);
-    overflow: hidden; display: flex; flex-direction: column;
+    border-radius: 22px; overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 80px rgba(168,85,247,0.06);
+    animation: fadeUp 0.55s ease both;
+    position: relative;
+  }
+  .chat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), rgba(192,132,252,0.5), transparent);
   }
 
+  /* agent bar */
   .agent-bar {
-    background: rgba(168,85,247,0.1);
-    border-bottom: 1px solid rgba(168,85,247,0.15);
-    padding: 12px 18px; display: flex; align-items: center; gap: 12px;
+    background: rgba(168,85,247,0.07);
+    border-bottom: 1px solid rgba(168,85,247,0.12);
+    padding: 13px 18px; display: flex; align-items: center; gap: 12px;
   }
   .agent-avatar {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: linear-gradient(135deg, #a855f7, #c084fc);
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; box-shadow: 0 0 14px rgba(168,85,247,0.4); flex-shrink: 0;
+    font-size: 18px; flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(168,85,247,0.35);
   }
-  .agent-name { font-size: 14px; font-weight: 600; }
+  .agent-name { font-size: 14px; font-weight: 600; letter-spacing: 0.01em; }
   .agent-status {
-    font-size: 11px; color: #a78bfa;
-    display: flex; align-items: center; gap: 5px; margin-top: 1px;
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: #9d7abf; margin-top: 2px;
   }
   .status-dot {
     width: 6px; height: 6px; border-radius: 50%;
@@ -129,247 +157,318 @@
     animation: blink 2s infinite;
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .agent-step-right { margin-left: auto; font-size: 11px; color: #6b47a8; font-weight: 500; }
 
+  /* messages */
   .messages {
-    height: 400px; overflow-y: auto;
-    padding: 18px; display: flex; flex-direction: column; gap: 4px;
-    scrollbar-width: thin; scrollbar-color: #3d2a6b transparent;
+    height: 420px; overflow-y: auto;
+    padding: 18px 16px; display: flex; flex-direction: column; gap: 2px;
+    scrollbar-width: thin; scrollbar-color: #2a1a4a transparent;
   }
-  .messages::-webkit-scrollbar { width: 4px; }
-  .messages::-webkit-scrollbar-thumb { background: #3d2a6b; border-radius: 4px; }
+  .messages::-webkit-scrollbar { width: 3px; }
+  .messages::-webkit-scrollbar-thumb { background: #2a1a4a; border-radius: 3px; }
 
-  .msg-row { display: flex; gap: 8px; margin: 5px 0; }
+  .msg-row { display: flex; gap: 9px; margin: 5px 0; }
   .msg-row.user-row { flex-direction: row-reverse; }
   .msg-av {
-    width: 30px; height: 30px; border-radius: 50%;
+    width: 32px; height: 32px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; flex-shrink: 0; align-self: flex-end;
+    font-size: 14px; flex-shrink: 0; align-self: flex-end;
   }
-  .msg-av.bot { background: linear-gradient(135deg, #a855f7, #c084fc); }
-  .msg-av.usr { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+  .msg-av.bot {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    box-shadow: 0 3px 10px rgba(168,85,247,0.25);
+  }
+  .msg-av.usr {
+    background: linear-gradient(135deg, #4a2080, #7c3aed);
+    border: 1px solid rgba(168,85,247,0.2);
+  }
   .msg-wrap { display: flex; flex-direction: column; max-width: 72%; gap: 3px; }
   .user-row .msg-wrap { align-items: flex-end; }
   .bubble {
-    padding: 10px 14px; border-radius: 16px;
-    font-size: 14px; line-height: 1.5;
-    animation: popIn 0.2s ease;
+    padding: 11px 15px; border-radius: 18px;
+    font-size: 14px; line-height: 1.55;
+    animation: popIn 0.22s ease;
   }
   @keyframes popIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
   .bot-bubble {
-    background: #1e1b2e; border: 1px solid rgba(168,85,247,0.15);
+    background: rgba(20,12,40,0.8);
+    border: 1px solid rgba(168,85,247,0.12);
     border-bottom-left-radius: 4px; color: #e9d5ff;
   }
   .user-bubble {
     background: linear-gradient(135deg, #7c3aed, #a855f7);
     border-bottom-right-radius: 4px; color: white;
+    box-shadow: 0 4px 14px rgba(168,85,247,0.25);
   }
-  .msg-time { font-size: 10px; color: #6b47a8; padding: 0 3px; }
+  .msg-time { font-size: 9px; color: #4a3070; padding: 0 3px; }
 
-  .typing-bubble { display: flex; gap: 5px; align-items: center; padding: 12px 16px; }
-  .td { width: 7px; height: 7px; border-radius: 50%; background: #a78bfa; animation: tdB 1.1s infinite; }
+  /* typing */
+  .typing-bubble { display: flex; gap: 5px; align-items: center; padding: 13px 16px; }
+  .td { width: 6px; height: 6px; border-radius: 50%; background: #6b47a8; animation: tdB 1.1s infinite; }
   .td:nth-child(2){animation-delay:0.18s} .td:nth-child(3){animation-delay:0.36s}
-  @keyframes tdB{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+  @keyframes tdB{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
 
+  /* options */
   .options-row {
     display: flex; gap: 8px; flex-wrap: wrap;
-    padding: 4px 0 2px 38px; animation: popIn 0.25s ease;
+    padding: 4px 0 2px 41px; animation: popIn 0.25s ease;
   }
   .opt {
-    border: 1px solid rgba(168,85,247,0.4);
-    background: rgba(168,85,247,0.08);
-    color: #c084fc; padding: 6px 14px; border-radius: 20px;
-    cursor: pointer; font-size: 13px;
-    font-family: 'Segoe UI', sans-serif; font-weight: 500;
-    transition: all 0.2s;
-  }
-  .opt:hover { background: rgba(168,85,247,0.2); border-color: #a855f7; color: white; transform: translateY(-1px); }
-
-  .input-bar {
-    border-top: 1px solid rgba(168,85,247,0.15);
-    padding: 14px 16px; display: flex; gap: 10px; align-items: center;
-    background: rgba(0,0,0,0.2);
-  }
-  .input-bar input {
-    flex: 1; background: #0f0f1a;
-    border: 1px solid rgba(168,85,247,0.25);
-    border-radius: 12px; padding: 11px 16px;
-    color: white; font-family: 'Segoe UI', sans-serif;
-    font-size: 14px; outline: none; transition: border-color 0.2s;
-  }
-  .input-bar input:focus { border-color: rgba(168,85,247,0.6); }
-  .input-bar input::placeholder { color: #4a3070; }
-  .send-btn {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: linear-gradient(135deg, #a855f7, #c084fc);
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: black;
-    transition: transform 0.15s, box-shadow 0.15s; flex-shrink: 0;
-  }
-  .send-btn:hover { transform: scale(1.07); box-shadow: 0 4px 16px rgba(168,85,247,0.5); }
-  .send-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-
-  .mic-btn {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: rgba(168,85,247,0.12);
     border: 1px solid rgba(168,85,247,0.35);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: #c084fc;
-    transition: all 0.2s; flex-shrink: 0;
+    background: rgba(168,85,247,0.07);
+    color: #c084fc; padding: 7px 15px; border-radius: 20px;
+    cursor: pointer; font-size: 13px; font-family: 'Outfit', 'Segoe UI', sans-serif;
+    font-weight: 500; transition: all 0.18s;
   }
-  .mic-btn:hover { background: rgba(168,85,247,0.25); transform: scale(1.07); }
-  .mic-btn.listening {
-    background: rgba(220,38,38,0.2);
-    border-color: #ef4444;
-    color: #ef4444;
-    animation: micPulse 1s infinite;
+  .opt:hover {
+    background: rgba(168,85,247,0.18); border-color: #a855f7;
+    color: white; transform: translateY(-1px);
   }
-  .mic-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-  @keyframes micPulse {
-    0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
-    50%      { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
-  }
+
+  /* mic status */
   .mic-status {
-    font-size: 11px; color: #ef4444; text-align: center;
-    padding: 2px 16px 6px; display: none;
+    font-size: 11px; color: #f87171; text-align: center;
+    padding: 3px 18px 5px; display: none; font-weight: 500;
   }
   .mic-status.show { display: block; }
 
-  /* ── RESULTS ── */
-  #results-page { display: none; width: 100%; max-width: 680px; }
+  /* input bar */
+  .input-bar {
+    border-top: 1px solid rgba(168,85,247,0.1);
+    padding: 13px 14px; display: flex; gap: 9px; align-items: center;
+    background: rgba(0,0,0,0.2);
+  }
+  .input-bar input {
+    flex: 1; background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(168,85,247,0.18);
+    border-radius: 12px; padding: 11px 16px;
+    color: white; font-family: 'Outfit', 'Segoe UI', sans-serif;
+    font-size: 14px; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-bar input:focus {
+    border-color: rgba(168,85,247,0.5);
+    box-shadow: 0 0 0 3px rgba(168,85,247,0.08);
+  }
+  .input-bar input::placeholder { color: #4a3070; }
+  .mic-btn {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: rgba(168,85,247,0.08);
+    border: 1px solid rgba(168,85,247,0.2);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0; transition: all 0.2s;
+  }
+  .mic-btn:hover { background: rgba(168,85,247,0.18); border-color: rgba(168,85,247,0.4); }
+  .mic-btn.listening {
+    background: rgba(248,113,113,0.1); border-color: #f87171;
+    animation: micPulse 1s infinite;
+  }
+  .mic-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  @keyframes micPulse {
+    0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,0.3)}
+    50%{box-shadow:0 0 0 8px rgba(248,113,113,0)}
+  }
+  .send-btn {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: white; flex-shrink: 0;
+    transition: all 0.18s; box-shadow: 0 4px 14px rgba(168,85,247,0.35);
+  }
+  .send-btn:hover { transform: scale(1.06); box-shadow: 0 6px 20px rgba(168,85,247,0.5); }
+  .send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  /* ── RESULTS PAGE ── */
+  #results-page { display: none; width: 100%; max-width: 700px; }
   #results-page.show { display: block; }
   #chat-wrap.hidden { display: none; }
 
-  .res-top {
+  .res-topbar {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 10px;
+    animation: fadeDown 0.4s ease both;
   }
-  .new-lead-btn {
-    background: transparent; border: 1px solid rgba(168,85,247,0.4);
-    color: #c4b5fd; padding: 8px 16px; border-radius: 10px;
-    cursor: pointer; font-family: 'Segoe UI', sans-serif; font-size: 13px; transition: all 0.2s;
+  .back-btn {
+    background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.2);
+    color: #c4b5fd; padding: 9px 16px; border-radius: 11px;
+    cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
+    transition: all 0.2s;
   }
-  .new-lead-btn:hover { background: rgba(168,85,247,0.1); color: white; }
+  .back-btn:hover { background: rgba(168,85,247,0.14); color: white; }
   .res-actions { display: flex; gap: 8px; }
-  .res-btn {
-    display: flex; align-items: center; gap: 5px;
-    padding: 8px 14px; border-radius: 10px; cursor: pointer;
-    font-size: 13px; font-family: 'Segoe UI', sans-serif; font-weight: 600; transition: all 0.2s;
+  .action-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 11px; cursor: pointer;
+    font-size: 13px; font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.2s;
   }
-  .res-btn.dl { background: linear-gradient(90deg, #a855f7, #c084fc); border: none; color: black; }
-  .res-btn.tr { background: transparent; border: 1px solid rgba(168,85,247,0.4); color: #c4b5fd; }
-  .res-btn.tr:hover { background: rgba(168,85,247,0.1); color: white; }
+  .action-btn.dl {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    border: none; color: white; box-shadow: 0 4px 14px rgba(168,85,247,0.35);
+  }
+  .action-btn.dl:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(168,85,247,0.5); }
+  .action-btn.tr {
+    background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.2); color: #c4b5fd;
+  }
+  .action-btn.tr:hover { background: rgba(168,85,247,0.14); color: white; }
 
+  /* qual banner */
   .qual-banner {
-    background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25);
-    border-radius: 18px; padding: 20px 22px; margin-bottom: 14px; animation: popIn 0.4s ease;
+    background: rgba(168,85,247,0.06);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 18px; padding: 20px 22px; margin-bottom: 13px;
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.45s ease both;
   }
-  .qual-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .qual-left { display: flex; align-items: center; gap: 12px; }
+  .qual-banner::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), transparent);
+  }
+  .qual-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .qual-left { display: flex; align-items: center; gap: 13px; }
   .qual-icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3);
+    width: 46px; height: 46px; border-radius: 13px;
+    background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.25);
     display: flex; align-items: center; justify-content: center; font-size: 22px;
   }
   .qual-title { font-size: 22px; font-weight: 700; color: #c084fc; }
-  .qual-sub { font-size: 13px; color: #a78bfa; margin-top: 2px; }
-  .qual-score { font-size: 18px; font-weight: 700; color: #c084fc; }
-  .prog-track { height: 4px; background: rgba(168,85,247,0.12); border-radius: 4px; overflow: hidden; }
-  .prog-fill { height: 100%; background: linear-gradient(90deg, #a855f7, #c084fc); transition: width 1s ease; }
+  .qual-sub { font-size: 13px; color: #9d7abf; margin-top: 2px; }
+  .qual-score { font-size: 17px; font-weight: 700; color: #c084fc; font-family: monospace; }
+  .prog-track { height: 3px; background: rgba(168,85,247,0.1); border-radius: 3px; overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, #7c3aed, #c084fc); transition: width 1.2s ease; border-radius: 3px; }
 
-  .data-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+  /* data grid */
+  .data-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 13px; }
   @media(max-width:560px){ .data-grid{grid-template-columns:repeat(2,1fr);} }
   .dc {
-    background: rgba(255,255,255,0.04); backdrop-filter: blur(10px);
-    border: 1px solid rgba(168,85,247,0.12); border-radius: 12px;
-    padding: 13px 14px; animation: popIn 0.4s ease both;
+    background: rgba(255,255,255,0.03); backdrop-filter: blur(10px);
+    border: 1px solid rgba(168,85,247,0.1); border-radius: 13px;
+    padding: 13px 14px; animation: fadeUp 0.4s ease both;
   }
-  .dc-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; display: flex; align-items: center; gap: 4px; }
+  .dc-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; display: flex; align-items: center; gap: 4px; }
   .dc-val { font-size: 14px; font-weight: 600; color: white; }
   .dc-val.purple { color: #c084fc; }
 
+  /* section card */
   .sc {
-    background: rgba(255,255,255,0.04); backdrop-filter: blur(10px);
-    border: 1px solid rgba(168,85,247,0.12); border-radius: 16px;
-    padding: 18px; margin-bottom: 14px; animation: popIn 0.5s ease both;
+    background: rgba(255,255,255,0.03); backdrop-filter: blur(10px);
+    border: 1px solid rgba(168,85,247,0.1); border-radius: 16px;
+    padding: 18px; margin-bottom: 13px; animation: fadeUp 0.5s ease both;
   }
-  .sc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .sc-title { font-size: 13px; font-weight: 600; color: #a78bfa; display: flex; align-items: center; gap: 7px; }
+  .sc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+  .sc-title { font-size: 13px; font-weight: 600; color: #9d7abf; display: flex; align-items: center; gap: 7px; }
   .sc-badge {
     font-size: 9px; padding: 3px 8px; border-radius: 6px;
-    background: rgba(168,85,247,0.15); color: #c084fc;
-    border: 1px solid rgba(168,85,247,0.25); letter-spacing: 0.06em; text-transform: uppercase;
+    background: rgba(168,85,247,0.1); color: #c084fc;
+    border: 1px solid rgba(168,85,247,0.2); letter-spacing: 0.07em; text-transform: uppercase;
   }
   .copy-btn {
-    background: transparent; border: 1px solid rgba(168,85,247,0.25);
-    color: #a78bfa; padding: 5px 10px; border-radius: 8px;
-    cursor: pointer; font-size: 11px; font-family: 'Segoe UI', sans-serif; transition: all 0.2s;
+    background: transparent; border: 1px solid rgba(168,85,247,0.15);
+    color: #6b47a8; padding: 5px 12px; border-radius: 8px;
+    cursor: pointer; font-size: 11px; font-family: 'Outfit', sans-serif; transition: all 0.2s;
   }
-  .copy-btn:hover { border-color: #a855f7; color: white; }
+  .copy-btn:hover { border-color: rgba(168,85,247,0.4); color: #c4b5fd; }
 
+  /* criteria */
   .crit-list { display: flex; flex-direction: column; gap: 8px; }
   .crit-item {
     display: flex; align-items: flex-start; justify-content: space-between;
-    background: #0f0f1a; border: 1px solid rgba(168,85,247,0.12);
-    border-radius: 10px; padding: 10px 14px; animation: popIn 0.35s ease both;
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(168,85,247,0.1);
+    border-radius: 11px; padding: 11px 14px; animation: fadeUp 0.35s ease both;
   }
   .crit-left { display: flex; align-items: flex-start; gap: 10px; }
   .crit-check {
     width: 22px; height: 22px; border-radius: 50%;
-    background: rgba(168,85,247,0.12); border: 1.5px solid #a855f7;
+    background: rgba(168,85,247,0.1); border: 1.5px solid #a855f7;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; flex-shrink: 0; margin-top: 1px; color: #c084fc;
   }
   .crit-name { font-size: 13px; font-weight: 600; color: white; }
-  .crit-detail { font-size: 11px; color: #6b47a8; margin-top: 2px; }
+  .crit-detail { font-size: 11px; color: #4a3070; margin-top: 2px; }
   .crit-pts { font-size: 12px; font-weight: 700; color: #c084fc; white-space: nowrap; padding-top: 2px; }
 
+  /* code block */
   .code-block {
-    background: #080810; border: 1px solid rgba(168,85,247,0.12);
+    background: #060810; border: 1px solid rgba(168,85,247,0.1);
     border-radius: 10px; padding: 14px;
     font-family: 'Courier New', monospace; font-size: 12px; color: #c4b5fd;
     overflow-x: auto; max-height: 200px; overflow-y: auto;
-    line-height: 1.6; white-space: pre;
-    scrollbar-width: thin; scrollbar-color: #3d2a6b transparent;
+    line-height: 1.65; white-space: pre;
+    scrollbar-width: thin; scrollbar-color: #2a1a4a transparent;
   }
-  .code-block::-webkit-scrollbar { width: 4px; height: 4px; }
-  .code-block::-webkit-scrollbar-thumb { background: #3d2a6b; border-radius: 4px; }
+
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(14px)}  to{opacity:1;transform:translateY(0)} }
+
+  /* ── MOBILE ── */
+  @media(max-width:480px){
+    body { padding: 14px 10px 22px; }
+    .topbar { margin-bottom: 10px; }
+    .lead-strip { font-size: 11px; gap: 10px; padding: 8px 12px; }
+    .step-circle { width: 24px; height: 24px; font-size: 9px; }
+    .step-line { width: 18px; }
+    .step-lbl { font-size: 7px; }
+    .messages { height: 360px; padding: 13px 10px; }
+    .msg-wrap { max-width: 80%; }
+    .msg-av { width: 28px; height: 28px; font-size: 12px; }
+    .bubble { font-size: 13px; padding: 9px 12px; }
+    .options-row { padding-left: 37px; gap: 6px; }
+    .opt { font-size: 12px; padding: 6px 12px; }
+    .input-bar { padding: 10px 10px; gap: 7px; }
+    .input-bar input { padding: 9px 12px; font-size: 13px; }
+    .mic-btn, .send-btn { width: 38px; height: 38px; font-size: 15px; }
+    .agent-bar { padding: 10px 13px; }
+    .agent-avatar { width: 35px; height: 35px; font-size: 16px; }
+    .res-topbar { flex-direction: column; align-items: flex-start; }
+    .qual-title { font-size: 18px; }
+    .sc { padding: 14px; }
+    .qual-banner { padding: 16px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>RealtyAssistant</h1>
-  <p>AI Lead Assistant powered by RealtyAssistant</p>
-</div>
-
 <!-- ── CHAT PAGE ── -->
 <div id="chat-wrap">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="t-icon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="50%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M18 12 L18 88 L36 88 L36 58 L54 88 L76 88 L55 55 C66 51 74 43 74 30 C74 18 63 12 48 12 Z M36 26 L47 26 C54 26 57 30 57 37 C57 44 54 47 47 47 L36 47 Z" fill="url(#rg2)"/></svg></div>
+      <div class="t-name">RealtyAssistant</div>
+      <div class="t-badge">AI</div>
+    </div>
+    <div class="topbar-right">
+      <div class="t-lead-id" id="lead-id-display">—</div>
+      <div class="t-phone" id="lead-phone-display">—</div>
+    </div>
+  </div>
 
   <div class="lead-strip">
     <span>👤 <b id="s-name">—</b></span>
     <span>📱 <b id="s-phone">—</b></span>
-    <span>📧 <b id="s-email">—</b></span>
+    <span>✉️ <b id="s-email">—</b></span>
   </div>
 
   <div class="steps-wrap">
     <div class="steps" id="steps-track"></div>
   </div>
 
-  <div class="card">
+  <div class="chat-card">
     <div class="agent-bar">
       <div class="agent-avatar">🤖</div>
-      <div>
+      <div style="flex:1">
         <div class="agent-name">RealtyAssistant AI</div>
         <div class="agent-status">
           <div class="status-dot"></div>
           <span id="step-label">Identity</span>
         </div>
       </div>
+      <div class="agent-step-right" id="step-counter">Step 1 of 7</div>
     </div>
+
     <div class="messages" id="messages"></div>
     <div class="mic-status" id="mic-status">🔴 Listening... speak now</div>
+
     <div class="input-bar">
       <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Click to speak">🎤</button>
       <input id="user-input" placeholder="Type or speak your message..." autocomplete="off">
@@ -381,11 +480,11 @@
 
 <!-- ── RESULTS PAGE ── -->
 <div id="results-page">
-  <div class="res-top">
-    <button class="new-lead-btn" onclick="resetChat()">← New Lead</button>
+  <div class="res-topbar">
+    <button class="back-btn" onclick="resetChat()">← New Lead</button>
     <div class="res-actions">
-      <button class="res-btn dl" onclick="dlReport()">⬇ Download Report</button>
-      <button class="res-btn tr" onclick="dlTranscript()">💬 View Transcript</button>
+      <button class="action-btn dl" onclick="dlReport()">⬇ Download Report</button>
+      <button class="action-btn tr" onclick="dlTranscript()">💬 Transcript</button>
     </div>
   </div>
 
@@ -395,7 +494,7 @@
         <div class="qual-icon" id="r-icon">✓</div>
         <div>
           <div class="qual-title" id="r-decision">Qualified</div>
-          <div class="qual-sub" id="r-sub">30 matching properties — ready for sales follow-up</div>
+          <div class="qual-sub" id="r-sub">30 matching properties — ready for follow-up</div>
         </div>
       </div>
       <div class="qual-score">🏆 <span id="r-score">7/7</span></div>
@@ -414,7 +513,7 @@
   </div>
 
   <div class="sc">
-    <div class="sc-title" style="margin-bottom:14px">🏅 Qualification Criteria Breakdown</div>
+    <div class="sc-title" style="margin-bottom:13px">🏅 Criteria Breakdown</div>
     <div class="crit-list" id="crit-list"></div>
   </div>
 
@@ -428,106 +527,75 @@
 </div>
 
 <script>
-// ════════════════════════════════
-//  CONFIG
-// ════════════════════════════════
-const STEPS    = ["Identity","Location","Type","Config","Budget","Consent","Done"];
-const lName    = localStorage.getItem("name")  || "Guest";
-const lPhone   = localStorage.getItem("phone") || "—";
-const lEmail   = localStorage.getItem("email") || "—";
-const leadId   = "lead_" + Date.now();
+// ── CONFIG ──
+const STEPS  = ["Identity","Location","Type","Config","Budget","Consent","Done"];
+const lName  = localStorage.getItem("name")  || "Guest";
+const lPhone = localStorage.getItem("phone") || "—";
+const lEmail = localStorage.getItem("email") || "—";
+const leadId = "RA-" + Date.now().toString(36).toUpperCase();
 
-document.getElementById("s-name").textContent  = lName;
-document.getElementById("s-phone").textContent = lPhone;
-document.getElementById("s-email").textContent = lEmail;
+document.getElementById("s-name").textContent          = lName;
+document.getElementById("s-phone").textContent         = lPhone;
+document.getElementById("s-email").textContent         = lEmail;
+document.getElementById("lead-id-display").textContent = leadId;
+document.getElementById("lead-phone-display").textContent = lPhone;
 
-// ════════════════════════════════
-//  STATE
-// ════════════════════════════════
-let step       = 0;      // 0=Identity, 0.5=GetName, 1=Location, 2=Type, 3=Config, 4=Budget, 5=Consent, 6=Done
-let lead       = {};
-let transcript = [];
-let busy       = false;
-let t0         = Date.now();
-let typingEl   = null;
-let optsEl     = null;
+// ── STATE ──
+let step=0, lead={}, transcript=[], busy=false, t0=Date.now();
+let typingEl=null, optsEl=null;
 
-// ════════════════════════════════
-//  STEP PROGRESS BAR
-// ════════════════════════════════
+// ── STEPS ──
 function renderSteps() {
   const track = document.getElementById("steps-track");
   track.innerHTML = "";
-  const s = Math.floor(step); // handle 0.5
-  STEPS.forEach((name, i) => {
-    const el  = document.createElement("div");
-    el.className = "step" + (i < s ? " done" : i === s ? " active" : "");
-    el.innerHTML = `<div class="step-circle">${i < s ? "✓" : i + 1}</div><div class="step-lbl">${name}</div>`;
+  const s = Math.floor(step);
+  STEPS.forEach((name,i) => {
+    const el = document.createElement("div");
+    el.className = "step"+(i<s?" done":i===s?" active":"");
+    el.innerHTML = `<div class="step-circle">${i<s?"✓":i+1}</div><div class="step-lbl">${name}</div>`;
     track.appendChild(el);
-    if (i < STEPS.length - 1) {
+    if (i < STEPS.length-1) {
       const ln = document.createElement("div");
-      ln.className = "step-line" + (i < s ? " done" : "");
-      ln.style.marginBottom = "15px";
+      ln.className = "step-line"+(i<s?" done":"");
+      ln.style.marginBottom = "14px";
       track.appendChild(ln);
     }
   });
-  document.getElementById("step-label").textContent = STEPS[s] || "Done";
+  document.getElementById("step-label").textContent   = STEPS[s] || "Done";
+  document.getElementById("step-counter").textContent = `Step ${Math.min(s+1,STEPS.length)} of ${STEPS.length}`;
 }
 
-// ════════════════════════════════
-//  MESSAGE HELPERS
-// ════════════════════════════════
-function now() {
-  return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-}
+// ── MESSAGES ──
+function now() { return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
 
 function addBot(html) {
   rmTyping();
-  transcript.push({ role: "agent", text: html.replace(/<[^>]+>/g, ''), time: now() });
+  transcript.push({role:"agent", text:html.replace(/<[^>]+>/g,''), time:now()});
   const row = document.createElement("div");
   row.className = "msg-row";
-  row.innerHTML = `
-    <div class="msg-av bot">🤖</div>
-    <div class="msg-wrap">
-      <div class="bubble bot-bubble">${html}</div>
-      <div class="msg-time">${now()}</div>
-    </div>`;
-  document.getElementById("messages").appendChild(row);
-  scroll();
+  row.innerHTML = `<div class="msg-av bot">🤖</div><div class="msg-wrap"><div class="bubble bot-bubble">${html}</div><div class="msg-time">${now()}</div></div>`;
+  document.getElementById("messages").appendChild(row); scroll();
 }
 
 function addUser(text) {
   rmOpts();
-  transcript.push({ role: "user", text, time: now() });
+  transcript.push({role:"user", text, time:now()});
   const row = document.createElement("div");
   row.className = "msg-row user-row";
-  row.innerHTML = `
-    <div class="msg-wrap">
-      <div class="bubble user-bubble">${esc(text)}</div>
-      <div class="msg-time">${now()}</div>
-    </div>
-    <div class="msg-av usr">👤</div>`;
-  document.getElementById("messages").appendChild(row);
-  scroll();
+  row.innerHTML = `<div class="msg-wrap"><div class="bubble user-bubble">${esc(text)}</div><div class="msg-time">${now()}</div></div><div class="msg-av usr">👤</div>`;
+  document.getElementById("messages").appendChild(row); scroll();
 }
 
 function showTyping() {
   rmTyping();
   const row = document.createElement("div");
   row.className = "msg-row";
-  row.innerHTML = `
-    <div class="msg-av bot">🤖</div>
-    <div class="msg-wrap">
-      <div class="bubble bot-bubble typing-bubble">
-        <div class="td"></div><div class="td"></div><div class="td"></div>
-      </div>
-    </div>`;
+  row.innerHTML = `<div class="msg-av bot">🤖</div><div class="msg-wrap"><div class="bubble bot-bubble typing-bubble"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
   typingEl = row;
-  document.getElementById("messages").appendChild(row);
-  scroll();
+  document.getElementById("messages").appendChild(row); scroll();
 }
 
-function rmTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+function rmTyping() { if(typingEl){typingEl.remove();typingEl=null;} }
 
 function showOpts(arr) {
   rmOpts();
@@ -535,411 +603,261 @@ function showOpts(arr) {
   wrap.className = "options-row";
   arr.forEach(o => {
     const b = document.createElement("button");
-    b.className = "opt";
-    b.textContent = o;
-    b.onclick = () => handleInput(o);
+    b.className="opt"; b.textContent=o;
+    b.onclick=()=>handleInput(o);
     wrap.appendChild(b);
   });
   optsEl = wrap;
-  document.getElementById("messages").appendChild(wrap);
-  scroll();
+  document.getElementById("messages").appendChild(wrap); scroll();
 }
 
-function rmOpts() { if (optsEl) { optsEl.remove(); optsEl = null; } }
-function scroll() { const m = document.getElementById("messages"); m.scrollTop = m.scrollHeight; }
+function rmOpts() { if(optsEl){optsEl.remove();optsEl=null;} }
+function scroll() { const m=document.getElementById("messages"); m.scrollTop=m.scrollHeight; }
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ════════════════════════════════
-//  BOT REPLY WITH TYPING DELAY
-// ════════════════════════════════
+// ── BOT REPLY ──
 function botReply(html, delay, opts) {
-  busy = true;
-  document.getElementById("send-btn").disabled = true;
+  busy=true; document.getElementById("send-btn").disabled=true;
   showTyping();
-  setTimeout(() => {
+  setTimeout(()=>{
     addBot(html);
-    if (opts && opts.length) showOpts(opts);
-    busy = false;
-    document.getElementById("send-btn").disabled = false;
-  }, delay || 800);
+    if(opts&&opts.length) showOpts(opts);
+    busy=false; document.getElementById("send-btn").disabled=false;
+  }, delay||800);
 }
 
-// ════════════════════════════════
-//  MAIN FLOW  (Rule-Based, No API)
-// ════════════════════════════════
+// ── FLOW ──
 function processStep(val) {
   const lo = val.toLowerCase().trim();
 
-  // ── STEP 0 : Confirm Identity ──
-  if (step === 0) {
-    if (lo.includes("yes") || lo.includes("that's me") || lo.includes("thats me") || lo.includes("speaking")) {
-      lead.name = lName;
-      step = 1; renderSteps();
-      botReply(`Great, thank you <b>${lName}</b>! 📍 Which city or area are you searching for a property in?`, 900);
-    } else if (lo.includes("no") || lo.includes("wrong") || lo.includes("not me")) {
-      step = 0.5; renderSteps();
-      botReply("No problem at all! May I know your good name, please?", 800);
+  if (step===0) {
+    if (lo.includes("yes")||lo.includes("that's me")||lo.includes("thats me")) {
+      lead.name=lName; step=1; renderSteps();
+      botReply(`Great, thank you <b>${lName}</b>! 📍 Which city or area are you searching for a property in?`,900);
+    } else if (lo.includes("no")||lo.includes("wrong")||lo.includes("not me")) {
+      step=0.5; renderSteps();
+      botReply("No problem at all! May I know your good name, please?",800);
     } else {
-      botReply(`Sorry, I didn't catch that. Am I speaking with <b>${lName}</b>?`, 700, ["Yes, that's me", "No, wrong person"]);
+      botReply(`Sorry, I didn't catch that. Am I speaking with <b>${lName}</b>?`,700,["Yes, that's me","No, wrong person"]);
     }
     return;
   }
 
-  // ── STEP 0.5 : Collect Correct Name ──
-  if (step === 0.5) {
-    const nameRegex = /^[a-zA-Z ]{3,}$/;
-    if (!nameRegex.test(val)) {
-      botReply("Please enter a valid full name (letters only, minimum 3 characters).", 700);
+  if (step===0.5) {
+    if (!/^[a-zA-Z\s]{3,}$/.test(val)) {
+      botReply("Please enter a valid full name (letters only, minimum 3 characters).",700);
     } else {
-      lead.name = val;
-      step = 1; renderSteps();
-      botReply(`Thank you, <b>${val}</b>! 📍 Which city or area are you searching for a property in?`, 900);
+      lead.name=val; step=1; renderSteps();
+      botReply(`Thank you, <b>${val}</b>! 📍 Which city or area are you searching for a property in?`,900);
     }
     return;
   }
 
-  // ── STEP 1 : Location ──
-  if (step === 1) {
-    if (val.length < 2) {
-      botReply('Could you please be more specific? For example: <b>"Delhi"</b> or <b>"Noida Sector 62"</b>.', 700);
+  if (step===1) {
+    if (val.length<2) {
+      botReply('Could you be more specific? For example: <b>"Delhi"</b> or <b>"Noida Sector 62"</b>.',700);
     } else {
-      lead.location = val;
-      step = 2; renderSteps();
-      botReply(`${val} — excellent! 🏠 Are you looking for a <b>Residential</b> property (flat/house) or a <b>Commercial</b> property (shop/office/plot)?`, 1000, ["Residential", "Commercial"]);
+      lead.location=val; step=2; renderSteps();
+      botReply(`${val} — excellent! 🏠 Are you looking for a <b>Residential</b> property (flat/house) or a <b>Commercial</b> property (shop/office/plot)?`,1000,["Residential","Commercial"]);
     }
     return;
   }
 
-  // ── STEP 2 : Property Type ──
-  if (step === 2) {
+  if (step===2) {
     if (lo.includes("residential")) {
-      lead.type = "Residential";
-      step = 3; renderSteps();
-      botReply("Great choice! Which BHK configuration are you looking for?", 800, ["1 BHK", "2 BHK", "3 BHK", "4 BHK"]);
+      lead.type="Residential"; step=3; renderSteps();
+      botReply("Great choice! Which BHK configuration are you looking for?",800,["1 BHK","2 BHK","3 BHK","4 BHK"]);
     } else if (lo.includes("commercial")) {
-      lead.type = "Commercial";
-      step = 3; renderSteps();
-      botReply("Understood! Are you interested in a <b>Shop</b>, <b>Office</b> space, or a <b>Commercial Plot</b>?", 800, ["Shop", "Office", "Plot"]);
+      lead.type="Commercial"; step=3; renderSteps();
+      botReply("Understood! Are you interested in a <b>Shop</b>, <b>Office</b>, or a <b>Plot</b>?",800,["Shop","Office","Plot"]);
     } else {
-      botReply("Please select Residential or Commercial.", 600, ["Residential", "Commercial"]);
+      botReply("Please select Residential or Commercial.",600,["Residential","Commercial"]);
     }
     return;
   }
 
-  // ── STEP 3 : Config / Topology ──
-  if (step === 3) {
-    if (lead.type === "Residential") {
-      let cfg = null;
-      if (lo.includes("1")) cfg = "1 BHK";
-      else if (lo.includes("2")) cfg = "2 BHK";
-      else if (lo.includes("3")) cfg = "3 BHK";
-      else if (lo.includes("4")) cfg = "4 BHK";
-      if (cfg) {
-        lead.config = cfg;
-        step = 4; renderSteps();
-        botReply(`Perfect — <b>${cfg}</b> in <b>${lead.location}</b>. 💰 What is your budget? (e.g. 50 lakh, 1 crore, 80L)`, 900);
-      } else {
-        botReply("Please choose a BHK option.", 600, ["1 BHK", "2 BHK", "3 BHK", "4 BHK"]);
-      }
+  if (step===3) {
+    if (lead.type==="Residential") {
+      const cfg=lo.includes("1")?"1 BHK":lo.includes("2")?"2 BHK":lo.includes("3")?"3 BHK":lo.includes("4")?"4 BHK":null;
+      if (cfg) { lead.config=cfg; step=4; renderSteps(); botReply(`Perfect — <b>${cfg}</b> in <b>${lead.location}</b>. 💰 What is your budget? (e.g. 50 lakh, 1 crore)`,900); }
+      else botReply("Please choose a BHK option.",600,["1 BHK","2 BHK","3 BHK","4 BHK"]);
     } else {
-      let cfg = null;
-      if (lo.includes("shop"))   cfg = "Shop";
-      else if (lo.includes("office")) cfg = "Office";
-      else if (lo.includes("plot"))   cfg = "Plot";
-      if (cfg) {
-        lead.config = cfg;
-        step = 4; renderSteps();
-        botReply(`Got it — <b>${cfg}</b> in <b>${lead.location}</b>. 💰 What is your budget? (e.g. 50 lakh, 1 crore, 80L)`, 900);
-      } else {
-        botReply("Please choose Shop, Office, or Plot.", 600, ["Shop", "Office", "Plot"]);
-      }
+      const cfg=lo.includes("shop")?"Shop":lo.includes("office")?"Office":lo.includes("plot")?"Plot":null;
+      if (cfg) { lead.config=cfg; step=4; renderSteps(); botReply(`Got it — <b>${cfg}</b> in <b>${lead.location}</b>. 💰 What is your budget? (e.g. 50 lakh, 1 crore)`,900); }
+      else botReply("Please choose Shop, Office, or Plot.",600,["Shop","Office","Plot"]);
     }
     return;
   }
 
-  // ── STEP 4 : Budget ──
-  if (step === 4) {
-    if (val.length < 1) {
-      botReply("Could you share your budget? For example: <b>50 lakh</b>, <b>1 crore</b>, <b>80L</b>.", 700);
-    } else {
-      lead.budget = val;
-      step = 5; renderSteps();
-      botReply("Thank you! 📞 Would you like a <b>sales representative</b> to call you to discuss the available options?", 1000, ["Yes, please call me", "No, thanks"]);
-    }
+  if (step===4) {
+    if (!val) { botReply("Please share your budget. For example: <b>50 lakh</b>, <b>1 crore</b>.",700); return; }
+    lead.budget=val; step=5; renderSteps();
+    botReply("Thank you! 📞 Would you like a <b>sales representative</b> to call you about available options?",1000,["Yes, please call me","No, thanks"]);
     return;
   }
 
-  // ── STEP 5 : Consent ──
-  if (step === 5) {
-    if (lo.includes("yes") || lo.includes("please")) {
-      lead.consent = "Yes";
-      step = 6; renderSteps();
-      botReply("Wonderful! Let me check available properties for you...", 600);
-      setTimeout(() => {
-        busy = true; showTyping();
-        setTimeout(() => {
-          addBot("✅ Great news! We found <b>30 matching properties</b> on realtyassistant.in. A sales representative will call you shortly. Thank you!");
-          busy = false;
-          setTimeout(renderResults, 1400);
-        }, 1800);
-      }, 800);
-    } else if (lo.includes("no") || lo.includes("thanks")) {
-      lead.consent = "No";
-      step = 6; renderSteps();
-      botReply("No problem! Let me check available properties for you...", 600);
-      setTimeout(() => {
-        busy = true; showTyping();
-        setTimeout(() => {
-          addBot("Thanks for your time — we'll keep you posted.");
-          busy = false;
-          setTimeout(renderResults, 1400);
-        }, 1800);
-      }, 800);
+  if (step===5) {
+    if (lo.includes("yes")||lo.includes("please")) {
+      lead.consent="Yes"; step=6; renderSteps();
+      botReply("Wonderful! Let me check available properties for you...",600);
+      setTimeout(()=>{ busy=true; showTyping(); setTimeout(()=>{ addBot("✅ Great news! We found <b>30 matching properties</b> on realtyassistant.in. A sales representative will call you shortly. Thank you!"); busy=false; setTimeout(renderResults,1400); },1800); },800);
+    } else if (lo.includes("no")||lo.includes("thanks")) {
+      lead.consent="No"; step=6; renderSteps();
+      botReply("Understood! Let me check available properties for you...",600);
+      setTimeout(()=>{ busy=true; showTyping(); setTimeout(()=>{ addBot("Thanks for your time — we'll keep you posted."); busy=false; setTimeout(renderResults,1400); },1800); },800);
     } else {
-      botReply("Please select Yes or No.", 600, ["Yes, please call me", "No, thanks"]);
+      botReply("Please select Yes or No.",600,["Yes, please call me","No, thanks"]);
     }
     return;
   }
 }
 
-// ════════════════════════════════
-//  DETERMINISTIC QUALIFICATION
-// ════════════════════════════════
+// ── QUALIFY ──
 function qualify() {
   const criteria = [
-    { criterion: "Contact Name Confirmed",       passed: !!lead.name,              detail: `Name: ${lead.name || "—"}` },
-    { criterion: "Location Specified",           passed: !!lead.location,          detail: `Location: ${lead.location || "—"}` },
-    { criterion: "Property Type Specified",      passed: !!lead.type,              detail: `Type: ${lead.type || "—"}` },
-    { criterion: "Topology/Subtype Specified",   passed: !!lead.config,            detail: `Topology: ${lead.config || "—"}` },
-    { criterion: "Budget Provided",              passed: !!lead.budget,            detail: `Budget: ${lead.budget || "—"}` },
-    { criterion: "Sales Representative Consent", passed: lead.consent === "Yes",   detail: lead.consent === "Yes" ? "User consented to sales follow-up" : "User declined sales call" },
-    { criterion: "Matching Properties Available",passed: true,                     detail: "30 matching properties found on realtyassistant.in" }
+    {criterion:"Contact Name Confirmed",       passed:!!lead.name,           detail:`Name: ${lead.name||"—"}`},
+    {criterion:"Location Specified",           passed:!!lead.location,       detail:`Location: ${lead.location||"—"}`},
+    {criterion:"Property Type Specified",      passed:!!lead.type,           detail:`Type: ${lead.type||"—"}`},
+    {criterion:"Topology/Subtype Specified",   passed:!!lead.config,         detail:`Topology: ${lead.config||"—"}`},
+    {criterion:"Budget Provided",              passed:!!lead.budget,         detail:`Budget: ${lead.budget||"—"}`},
+    {criterion:"Sales Representative Consent", passed:lead.consent==="Yes",  detail:lead.consent==="Yes"?"User consented to sales follow-up":"User declined sales call"},
+    {criterion:"Matching Properties Available",passed:true,                  detail:"30 matching properties found on realtyassistant.in"},
   ];
-
-  const score    = criteria.filter(c => c.passed).length;
-  const maxScore = criteria.length;
-
-  // Core rule: must have name, location, type, config AND budget
-  const qualified = !!(lead.name && lead.location && lead.type && lead.config && lead.budget);
-  const decision  = qualified ? "Qualified" : "Not Qualified";
-
+  const score = criteria.filter(c=>c.passed).length;
+  const qualified = !!(lead.name&&lead.location&&lead.type&&lead.config&&lead.budget);
+  const decision = qualified?"Qualified":"Not Qualified";
   const summary = {
-    contact_name  : lead.name     || "—",
-    location      : lead.location || "—",
-    property_type : lead.type     || "—",
-    subtype       : lead.config   || "—",
-    budget        : lead.budget   || "—",
-    consent       : lead.consent  || "—",
-    property_count: 30,
-    qualification : decision,
-    reason        : qualified
-      ? "All key criteria met: Name confirmed, Location specified, Property type & topology provided, Budget given."
-      : "One or more required fields missing — lead needs further qualification."
+    contact_name:lead.name||"—", location:lead.location||"—",
+    property_type:lead.type||"—", subtype:lead.config||"—",
+    budget:lead.budget||"—", consent:lead.consent||"—",
+    property_count:30, qualification:decision,
+    reason:qualified?"All key criteria met.":"One or more required fields missing."
   };
-
-  return {
-    leadId,
-    timestamp : new Date().toISOString(),
-    decision,
-    score,
-    maxScore,
-    reasons   : criteria,
-    summary,
-    contact   : { name: lead.name || lName, phone: lPhone, email: lEmail }
-  };
+  return {leadId, timestamp:new Date().toISOString(), decision, score, maxScore:7, reasons:criteria, summary, contact:{name:lead.name||lName,phone:lPhone,email:lEmail}};
 }
 
-// ════════════════════════════════
-//  RENDER RESULTS PAGE
-// ════════════════════════════════
+// ── RENDER RESULTS ──
 function renderResults() {
   const result = qualify();
-
   document.getElementById("chat-wrap").classList.add("hidden");
   document.getElementById("results-page").classList.add("show");
 
-  // Banner
-  const qualified = result.decision === "Qualified";
-  document.getElementById("r-icon").textContent     = qualified ? "✓" : "✗";
+  const q = result.decision==="Qualified";
+  document.getElementById("r-icon").textContent     = q?"✓":"✗";
   document.getElementById("r-decision").textContent = result.decision;
-  document.getElementById("r-decision").style.color = qualified ? "#c084fc" : "#f87171";
-  document.getElementById("r-sub").textContent      = qualified
-    ? "30 matching properties found — ready for sales follow-up"
-    : "Insufficient data — follow-up required";
+  document.getElementById("r-decision").style.color = q?"#c084fc":"#f87171";
+  document.getElementById("r-sub").textContent      = q?"30 matching properties found — ready for sales follow-up":"Insufficient data — further qualification needed";
   document.getElementById("r-score").textContent    = `${result.score}/${result.maxScore}`;
-  setTimeout(() => {
-    document.getElementById("r-prog").style.width = (result.score / result.maxScore * 100) + "%";
-  }, 150);
+  setTimeout(()=>{ document.getElementById("r-prog").style.width=(result.score/result.maxScore*100)+"%"; },150);
 
-  // Data Grid
-  const dur = Math.round((Date.now() - t0) / 1000);
-  const s   = result.summary;
-  const cards = [
-    { icon:"👤", color:"#c084fc", lbl:"Contact Name",    val: s.contact_name },
-    { icon:"📍", color:"#a78bfa", lbl:"Location",        val: s.location },
-    { icon:"🏠", color:"#c084fc", lbl:"Property Type",   val: s.property_type },
-    { icon:"🏢", color:"#a855f7", lbl:"Configuration",   val: s.subtype },
-    { icon:"💰", color:"#c084fc", lbl:"Budget",          val: s.budget },
-    { icon:"📞", color:"#a78bfa", lbl:"Sales Consent",   val: s.consent === "Yes" ? "✅ Yes" : "❌ No", purple: s.consent === "Yes" },
-    { icon:"🔍", color:"#c084fc", lbl:"Properties Found",val: "30 on realtyassistant..." },
-    { icon:"⏱",  color:"#6b47a8", lbl:"Duration",        val: dur + "s" }
+  const dur=Math.round((Date.now()-t0)/1000), s=result.summary;
+  const cards=[
+    {icon:"👤",color:"#c084fc",lbl:"Contact Name",    val:s.contact_name},
+    {icon:"📍",color:"#a78bfa",lbl:"Location",        val:s.location},
+    {icon:"🏠",color:"#c084fc",lbl:"Property Type",   val:s.property_type},
+    {icon:"🏢",color:"#a855f7",lbl:"Configuration",   val:s.subtype},
+    {icon:"💰",color:"#c084fc",lbl:"Budget",          val:s.budget},
+    {icon:"📞",color:"#a78bfa",lbl:"Sales Consent",   val:s.consent==="Yes"?"✅ Yes":"❌ No", purple:s.consent==="Yes"},
+    {icon:"🔍",color:"#c084fc",lbl:"Properties Found",val:"30 on realtyassistant..."},
+    {icon:"⏱", color:"#4a3070",lbl:"Duration",        val:dur+"s"}
   ];
-  document.getElementById("data-grid").innerHTML = cards.map((c, i) => `
-    <div class="dc" style="animation-delay:${i * 0.06}s">
+  document.getElementById("data-grid").innerHTML = cards.map((c,i)=>`
+    <div class="dc" style="animation-delay:${i*0.06}s">
       <div class="dc-lbl" style="color:${c.color}">${c.icon} ${c.lbl}</div>
-      <div class="dc-val${c.purple ? ' purple' : ''}">${c.val}</div>
+      <div class="dc-val${c.purple?' purple':''}">${c.val}</div>
     </div>`).join("");
 
-  // Summary JSON
-  document.getElementById("summary-json").textContent = JSON.stringify(s, null, 2);
-
-  // Criteria List
-  document.getElementById("crit-list").innerHTML = result.reasons.map((r, i) => `
-    <div class="crit-item" style="animation-delay:${i * 0.07}s">
+  document.getElementById("summary-json").textContent = JSON.stringify(s,null,2);
+  document.getElementById("crit-list").innerHTML = result.reasons.map((r,i)=>`
+    <div class="crit-item" style="animation-delay:${i*0.07}s">
       <div class="crit-left">
-        <div class="crit-check" style="${r.passed ? '' : 'border-color:#f87171;color:#f87171'}">${r.passed ? "✓" : "✗"}</div>
-        <div>
-          <div class="crit-name">${r.criterion}</div>
-          <div class="crit-detail">${r.detail}</div>
-        </div>
+        <div class="crit-check" style="${r.passed?'':'border-color:#f87171;color:#f87171'}">${r.passed?"✓":"✗"}</div>
+        <div><div class="crit-name">${r.criterion}</div><div class="crit-detail">${r.detail}</div></div>
       </div>
-      <div class="crit-pts" style="${r.passed ? '' : 'color:#f87171'}">${r.passed ? "+pts" : "0pts"}</div>
+      <div class="crit-pts" style="${r.passed?'':'color:#f87171'}">${r.passed?"+pts":"0pts"}</div>
     </div>`).join("");
-
-  // Full JSON
-  document.getElementById("full-json").textContent = JSON.stringify(result, null, 2);
-
-  window.scrollTo(0, 0);
+  document.getElementById("full-json").textContent = JSON.stringify(result,null,2);
+  window.scrollTo(0,0);
 }
 
-// ════════════════════════════════
-//  UTILS
-// ════════════════════════════════
-function copyEl(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent)
-    .then(() => alert("Copied to clipboard!"));
-}
-
+// ── UTILS ──
+function copyEl(id) { navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>alert("Copied!")); }
 function dlReport() {
-  const blob = new Blob([JSON.stringify(qualify(), null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = `report-${leadId}.json`; a.click();
+  const blob=new Blob([JSON.stringify(qualify(),null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${leadId}-report.json`; a.click();
 }
-
 function dlTranscript() {
-  const txt  = transcript.map(m => `[${m.time}] [${m.role.toUpperCase()}]: ${m.text}`).join("\n\n");
-  const blob = new Blob([txt], { type: "text/plain" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = `transcript-${leadId}.txt`; a.click();
+  const txt=transcript.map(m=>`[${m.time}] [${m.role.toUpperCase()}]: ${m.text}`).join("\n\n");
+  const blob=new Blob([txt],{type:"text/plain"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${leadId}-transcript.txt`; a.click();
 }
-
 function resetChat() {
   document.getElementById("results-page").classList.remove("show");
   document.getElementById("chat-wrap").classList.remove("hidden");
-  step = 0; lead = {}; transcript = []; busy = false; t0 = Date.now();
-  document.getElementById("messages").innerHTML = "";
+  step=0; lead={}; transcript=[]; busy=false; t0=Date.now();
+  document.getElementById("messages").innerHTML="";
   renderSteps(); init();
 }
 
-// ════════════════════════════════
-//  INPUT HANDLERS
-// ════════════════════════════════
+// ── INPUT ──
 function sendMsg() {
-  if (busy) return;
-  const inp = document.getElementById("user-input");
-  const val = inp.value.trim();
-  if (!val) return;
-  inp.value = "";
-  handleInput(val);
+  if(busy) return;
+  const inp=document.getElementById("user-input");
+  const val=inp.value.trim(); if(!val) return;
+  inp.value=""; handleInput(val);
 }
+function handleInput(val) { if(busy) return; addUser(val); processStep(val.trim()); }
+document.getElementById("user-input").addEventListener("keypress",e=>{ if(e.key==="Enter") sendMsg(); });
 
-function handleInput(val) {
-  if (busy) return;
-  addUser(val);
-  processStep(val.trim());
-}
-
-document.getElementById("user-input").addEventListener("keypress", e => {
-  if (e.key === "Enter") sendMsg();
-});
-
-// ════════════════════════════════
-//  INIT
-// ════════════════════════════════
-function init() {
-  renderSteps();
-  busy = true;
-  showTyping();
-  setTimeout(() => {
-    addBot(`Hello — this is RealtyAssistant calling about the property enquiry you submitted. Am I speaking with <b>${lName}</b>?`);
-    showOpts(["Yes, that's me", "No, wrong person"]);
-    busy = false;
-  }, 700);
-}
-
-init();
-
-// ════════════════════════════════
-//  MIC / SPEECH RECOGNITION
-// ════════════════════════════════
-let recognition = null;
-let isListening = false;
-
+// ── MIC ──
+let recognition=null, isListening=false;
 function initSpeech() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    document.getElementById("mic-btn").disabled = true;
-    document.getElementById("mic-btn").title = "Speech not supported in this browser. Use Chrome.";
-    return null;
-  }
-  const r = new SpeechRecognition();
-  r.lang = "en-IN";
-  r.continuous = false;
-  r.interimResults = true;
-
-  r.onstart = () => {
-    isListening = true;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ document.getElementById("mic-btn").disabled=true; return null; }
+  const r=new SR(); r.lang="en-IN"; r.continuous=false; r.interimResults=true;
+  r.onstart=()=>{
+    isListening=true;
     document.getElementById("mic-btn").classList.add("listening");
-    document.getElementById("mic-btn").textContent = "🔴";
+    document.getElementById("mic-btn").textContent="🔴";
     document.getElementById("mic-status").classList.add("show");
-    document.getElementById("user-input").placeholder = "Listening...";
+    document.getElementById("user-input").placeholder="Listening...";
   };
-
-  r.onresult = (e) => {
-    const transcript = Array.from(e.results).map(r => r[0].transcript).join("");
-    document.getElementById("user-input").value = transcript;
-    if (e.results[e.results.length - 1].isFinal) {
-      stopMic();
-      setTimeout(() => sendMsg(), 300);
-    }
+  r.onresult=(e)=>{
+    const t=Array.from(e.results).map(r=>r[0].transcript).join("");
+    document.getElementById("user-input").value=t;
+    if(e.results[e.results.length-1].isFinal){ stopMic(); setTimeout(()=>sendMsg(),300); }
   };
-
-  r.onerror = (e) => {
-    stopMic();
-    if (e.error !== "no-speech") alert("Mic error: " + e.error);
-  };
-
-  r.onend = () => stopMic();
+  r.onerror=(e)=>{ stopMic(); if(e.error!=="no-speech") alert("Mic error: "+e.error); };
+  r.onend=()=>stopMic();
   return r;
 }
-
 function toggleMic() {
-  if (busy) return;
-  if (isListening) { stopMic(); return; }
-  if (!recognition) recognition = initSpeech();
-  if (!recognition) return;
-  try { recognition.start(); } catch(e) { console.error(e); }
+  if(busy) return;
+  if(isListening){ stopMic(); return; }
+  if(!recognition) recognition=initSpeech();
+  if(!recognition) return;
+  try{ recognition.start(); }catch(e){ console.error(e); }
+}
+function stopMic() {
+  isListening=false;
+  document.getElementById("mic-btn").classList.remove("listening");
+  document.getElementById("mic-btn").textContent="🎤";
+  document.getElementById("mic-status").classList.remove("show");
+  document.getElementById("user-input").placeholder="Type or speak your message...";
+  try{ if(recognition) recognition.stop(); }catch(e){}
 }
 
-function stopMic() {
-  isListening = false;
-  const btn = document.getElementById("mic-btn");
-  btn.classList.remove("listening");
-  btn.textContent = "🎤";
-  document.getElementById("mic-status").classList.remove("show");
-  document.getElementById("user-input").placeholder = "Type or speak your message...";
-  try { if (recognition) recognition.stop(); } catch(e) {}
+// ── INIT ──
+function init() {
+  renderSteps();
+  busy=true; showTyping();
+  setTimeout(()=>{
+    addBot(`Hello — this is RealtyAssistant calling about the property enquiry you submitted. Am I speaking with <b>${lName}</b>?`);
+    showOpts(["Yes, that's me","No, wrong person"]);
+    busy=false;
+  },700);
 }
+init();
 </script>
 </body>
 </html>
