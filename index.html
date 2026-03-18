@@ -2,14 +2,14 @@
 <html>
 <head>
   <title>RealtyAssistant</title>
-
-  <!-- IMPORTANT -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Outfit', 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #0a0a0a, #1a0f2e);
       color: white;
       display: flex;
@@ -17,223 +17,271 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 30px 16px;
+      position: relative;
+      overflow-x: hidden;
     }
 
+    body::before {
+      content: '';
+      position: fixed;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 65%);
+      top: -150px; left: -150px; pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 65%);
+      bottom: -100px; right: -100px; pointer-events: none;
+    }
+
+    /* ── HEADER ── */
     .header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 28px;
+      animation: fadeDown 0.5s ease both;
+    }
+
+    .logo-row {
+      display: flex; align-items: center;
+      justify-content: center; gap: 13px;
+      margin-bottom: 8px;
+    }
+
+    /* Brand R Logo */
+    .logo-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, #2d1b69, #1a0f3e);
+      border: 1px solid rgba(168,85,247,0.35);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 22px rgba(168,85,247,0.45), 0 0 50px rgba(168,85,247,0.15);
+      flex-shrink: 0; position: relative; overflow: hidden;
+    }
+    .logo-icon::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(168,85,247,0.2), transparent);
+    }
+    .logo-icon svg {
+      width: 30px; height: 30px;
+      filter: drop-shadow(0 0 8px rgba(168,85,247,0.9));
+      position: relative; z-index: 1;
     }
 
     .header h1 {
-      font-size: 34px;
-      margin: 0;
-      background: linear-gradient(90deg, #c084fc, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 32px; font-weight: 800; margin: 0;
+      background: linear-gradient(90deg, #e2d4ff, #c084fc, #a855f7);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: -0.3px;
     }
 
     .header p {
-      color: #c4b5fd;
-      margin-top: 5px;
+      color: #9d89c4; margin-top: 5px;
+      font-size: 13px; font-weight: 400;
     }
 
+    /* ── CARD ── */
     .card {
-      width: 420px;
-      max-width: 100%;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(20px);
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(168,85,247,0.3);
+      width: 100%; max-width: 440px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(24px);
+      padding: 30px 28px;
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,0.14);
+      box-shadow: 0 0 40px rgba(168,85,247,0.1), 0 20px 60px rgba(0,0,0,0.4);
+      animation: fadeUp 0.6s ease both;
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168,85,247,0.6), transparent);
     }
 
-    .input-box {
-      margin-top: 14px;
-    }
-
+    /* ── FIELDS ── */
+    .input-box { margin-top: 18px; }
     .input-box label {
-      font-size: 14px;
-      color: #c4b5fd;
-      margin-bottom: 6px;
-      display: block;
+      font-size: 11px; font-weight: 700; color: #c4b5fd;
+      margin-bottom: 8px; display: block;
+      letter-spacing: 0.1em; text-transform: uppercase;
     }
-
     .input-field {
-      display: flex;
-      align-items: center;
-      background: #0f0f1a;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      transition: 0.2s;
+      display: flex; align-items: center;
+      background: #0d0d1f; padding: 14px 16px;
+      border-radius: 14px; border: 1px solid rgba(168,85,247,0.1);
+      transition: all 0.2s; gap: 10px;
     }
-
     .input-field:focus-within {
-      border: 1px solid #a855f7;
-      box-shadow: 0 0 10px rgba(168,85,247,0.5);
+      border-color: rgba(168,85,247,0.5);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.07);
     }
-
-    .input-field span {
-      margin-right: 10px;
-      color: #a78bfa;
-    }
-
+    .input-field span { font-size: 16px; flex-shrink: 0; }
     .input-field input {
-      border: none;
-      outline: none;
-      background: transparent;
-      color: white;
-      flex: 1;
-      font-size: 15px;
+      border: none; outline: none; background: transparent;
+      color: white; flex: 1; font-size: 14px;
+      font-family: 'Outfit', sans-serif; font-weight: 400;
     }
+    .input-field input::placeholder { color: #4a3a6a; }
 
-    .phone-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .phone-group { display: flex; gap: 10px; }
     .code {
-      background: #1e1b2e;
-      padding: 14px;
-      border-radius: 10px;
-      color: white;
-      font-weight: bold;
+      background: #0d0d1f; padding: 14px 16px; border-radius: 14px;
+      border: 1px solid rgba(168,85,247,0.1);
+      color: #c4b5fd; font-weight: 600; font-size: 14px;
+      white-space: nowrap; display: flex; align-items: center; gap: 5px;
     }
 
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 22px 0 0;
+    }
+    .div-line { flex: 1; height: 1px; background: rgba(168,85,247,0.1); }
+    .div-text { font-size: 10px; color: #5a4a7a; letter-spacing: 0.1em; font-weight: 600; }
+
+    /* ── BUTTON ── */
     button {
-      width: 100%;
-      padding: 16px;
-      margin-top: 18px;
-      border-radius: 14px;
-      border: none;
-      background: linear-gradient(90deg, #a855f7, #c084fc);
-      color: black;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
+      width: 100%; padding: 16px; margin-top: 16px;
+      border-radius: 14px; border: none;
+      background: linear-gradient(90deg, #7c3aed, #a855f7, #c084fc);
+      color: white; font-weight: 700; font-size: 15px;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 0.02em;
+      transition: all 0.25s;
+      box-shadow: 0 8px 24px rgba(168,85,247,0.35);
+      position: relative; overflow: hidden;
     }
-
-    button:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(168,85,247,0.6);
+    button::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      pointer-events: none;
     }
+    button:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(168,85,247,0.5); }
+    button:active { transform: translateY(0); }
 
-    /* MOBILE PERFECT 🔥 */
-    @media (max-width: 768px) {
-
-      body {
-        justify-content: flex-start;
-        padding: 20px 12px;
-      }
-
-      .header h1 {
-        font-size: 26px;
-      }
-
-      .header p {
-        font-size: 12px;
-      }
-
-      .card {
-        width: 100%;
-        padding: 20px;
-        border-radius: 16px;
-      }
-
-      .input-field {
-        padding: 12px;
-      }
-
-      .input-field input {
-        font-size: 14px;
-      }
-
-      button {
-        padding: 14px;
-        font-size: 15px;
-      }
+    /* ── FEATURES ── */
+    .features {
+      display: flex; justify-content: center;
+      gap: 14px; margin-top: 18px; flex-wrap: wrap;
     }
+    .feat {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: #5a4a7a; font-weight: 500;
+    }
+    .feat::before { content: '●'; font-size: 6px; color: #a855f7; }
 
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(16px)}  to{opacity:1;transform:translateY(0)} }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      body { justify-content: flex-start; padding: 28px 14px; }
+      .header { margin-bottom: 22px; }
+      .header h1 { font-size: 26px; }
+      .logo-icon { width: 44px; height: 44px; border-radius: 12px; }
+      .logo-icon svg { width: 26px; height: 26px; }
+      .card { padding: 24px 18px; border-radius: 18px; }
+      .input-field { padding: 12px 14px; }
+      button { padding: 14px; font-size: 14px; }
+    }
   </style>
 </head>
-
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <h1>RealtyAssistant</h1>
+  <div class="logo-row">
+
+    <!-- Brand R Logo (SVG) -->
+    <div class="logo-icon">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#60a5fa"/>
+            <stop offset="40%"  stop-color="#a855f7"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+        </defs>
+        <path d="M18 12 L18 88 L36 88 L36 58 L54 88 L76 88 L55 55
+                 C66 51 74 43 74 30 C74 18 63 12 48 12 Z
+                 M36 26 L47 26 C54 26 57 30 57 37
+                 C57 44 54 47 47 47 L36 47 Z"
+              fill="url(#rg)"/>
+      </svg>
+    </div>
+
+    <h1>RealtyAssistant</h1>
+  </div>
   <p>AI Lead Assistant powered by RealtyAssistant</p>
 </div>
 
+<!-- CARD -->
 <div class="card">
 
-  <!-- NAME -->
   <div class="input-box">
     <label>Full Name</label>
     <div class="input-field">
       <span>👤</span>
-      <input id="name" placeholder="Robert Miles">
+      <input id="name" placeholder="Robert Miles" autocomplete="name">
     </div>
   </div>
 
-  <!-- PHONE -->
   <div class="input-box">
     <label>Phone Number</label>
     <div class="phone-group">
-      <div class="code">+91</div>
-      <div class="input-field" style="flex:1;">
+      <div class="code">🇮🇳 +91</div>
+      <div class="input-field" style="flex:1">
         <span>📱</span>
-        <input id="phone" maxlength="10" placeholder="9876543210">
+        <input id="phone" maxlength="10" placeholder="9876543210" type="tel">
       </div>
     </div>
   </div>
 
-  <!-- EMAIL -->
   <div class="input-box">
     <label>Email Address</label>
     <div class="input-field">
-      <span>📧</span>
-      <input id="email" placeholder="robert@example.com">
+      <span>✉️</span>
+      <input id="email" placeholder="robert@example.com" type="email">
     </div>
+  </div>
+
+  <div class="divider">
+    <div class="div-line"></div>
+    <div class="div-text">READY TO START</div>
+    <div class="div-line"></div>
   </div>
 
   <button onclick="goToChat()">Start AI Chat →</button>
 
+  <div class="features">
+    <span class="feat">AI Powered</span>
+    <span class="feat">Voice Enabled</span>
+    <span class="feat">Instant Match</span>
+    <span class="feat">Free to Use</span>
+  </div>
+
 </div>
 
 <script>
-
 function goToChat() {
-  const name = document.getElementById("name").value.trim();
+  const name  = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const email = document.getElementById("email").value.trim();
 
-  if (name === "") {
-    alert("Please enter your name");
-    return;
-  }
+  if (name === "") { alert("Please enter your name"); return; }
+  if (!/^[a-zA-Z\s]{2,}$/.test(name)) { alert("Please enter a valid name (letters only)"); return; }
+  if (!/^[0-9]{10}$/.test(phone)) { alert("Phone number must be exactly 10 digits"); return; }
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$/.test(email)) { alert("Enter a valid email address"); return; }
 
-  const phoneRegex = /^[0-9]{10}$/;
-  if (!phoneRegex.test(phone)) {
-    alert("Phone number must be exactly 10 digits");
-    return;
-  }
-
- const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert("Enter a valid email (must include @ and .com)");
-    return;
-  }
-
-  localStorage.setItem("name", name);
+  localStorage.setItem("name",  name);
   localStorage.setItem("phone", phone);
   localStorage.setItem("email", email);
-
   window.location.href = "chat.html";
 }
 
+document.addEventListener("keypress", e => { if (e.key === "Enter") goToChat(); });
 </script>
 
 </body>
