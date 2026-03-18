@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RealtyAssistant</title>
+
+  <!-- IMPORTANT -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a0f2e);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 34px;
+      margin: 0;
+      background: linear-gradient(90deg, #c084fc, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      color: #c4b5fd;
+      margin-top: 5px;
+    }
+
+    .card {
+      width: 420px;
+      max-width: 100%;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(168,85,247,0.3);
+    }
+
+    .input-box {
+      margin-top: 14px;
+    }
+
+    .input-box label {
+      font-size: 14px;
+      color: #c4b5fd;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input-field {
+      display: flex;
+      align-items: center;
+      background: #0f0f1a;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: 0.2s;
+    }
+
+    .input-field:focus-within {
+      border: 1px solid #a855f7;
+      box-shadow: 0 0 10px rgba(168,85,247,0.5);
+    }
+
+    .input-field span {
+      margin-right: 10px;
+      color: #a78bfa;
+    }
+
+    .input-field input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: white;
+      flex: 1;
+      font-size: 15px;
+    }
+
+    .phone-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code {
+      background: #1e1b2e;
+      padding: 14px;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 18px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(90deg, #a855f7, #c084fc);
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(168,85,247,0.6);
+    }
+
+    /* MOBILE PERFECT 🔥 */
+    @media (max-width: 768px) {
+
+      body {
+        justify-content: flex-start;
+        padding: 20px 12px;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .header p {
+        font-size: 12px;
+      }
+
+      .card {
+        width: 100%;
+        padding: 20px;
+        border-radius: 16px;
+      }
+
+      .input-field {
+        padding: 12px;
+      }
+
+      .input-field input {
+        font-size: 14px;
+      }
+
+      button {
+        padding: 14px;
+        font-size: 15px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>RealtyAssistant</h1>
+  <p>AI Lead Assistant powered by RealtyAssistant</p>
+</div>
+
+<div class="card">
+
+  <!-- NAME -->
+  <div class="input-box">
+    <label>Full Name</label>
+    <div class="input-field">
+      <span>👤</span>
+      <input id="name" placeholder="Robert Miles">
+    </div>
+  </div>
+
+  <!-- PHONE -->
+  <div class="input-box">
+    <label>Phone Number</label>
+    <div class="phone-group">
+      <div class="code">+91</div>
+      <div class="input-field" style="flex:1;">
+        <span>📱</span>
+        <input id="phone" maxlength="10" placeholder="9876543210">
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL -->
+  <div class="input-box">
+    <label>Email Address</label>
+    <div class="input-field">
+      <span>📧</span>
+      <input id="email" placeholder="robert@example.com">
+    </div>
+  </div>
+
+  <button onclick="goToChat()">Start AI Chat →</button>
+
+</div>
+
+<script>
+
+function goToChat() {
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+
+  if (name === "") {
+    alert("Please enter your name");
+    return;
+  }
+
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!phoneRegex.test(phone)) {
+    alert("Phone number must be exactly 10 digits");
+    return;
+  }
+
+  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.com$/;
+  if (!emailRegex.test(email)) {
+    alert("Enter a valid email (must include @ and .com)");
+    return;
+  }
+
+  localStorage.setItem("name", name);
+  localStorage.setItem("phone", phone);
+  localStorage.setItem("email", email);
+
+  window.location.href = "chat.html";
+}
+
+</script>
+
+</body>
+</html>

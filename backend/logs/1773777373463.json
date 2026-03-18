@@ -1,0 +1,63 @@
+{
+  "status": "Qualified",
+  "propertyCount": 5,
+  "leadData": {
+    "name": "Saksham",
+    "location": "jdhj123",
+    "type": "Residential",
+    "bhk": "3BHK",
+    "budget": 6000000,
+    "consent": "Yes"
+  },
+  "transcript": [
+    {
+      "role": "agent",
+      "msg": "Hello, am I speaking with Saksham?"
+    },
+    {
+      "role": "user",
+      "msg": "Yes"
+    },
+    {
+      "role": "agent",
+      "msg": "Which location are you searching in?"
+    },
+    {
+      "role": "user",
+      "msg": "jdhj123"
+    },
+    {
+      "role": "agent",
+      "msg": "Residential or Commercial?"
+    },
+    {
+      "role": "user",
+      "msg": "Residential"
+    },
+    {
+      "role": "agent",
+      "msg": "Which BHK?"
+    },
+    {
+      "role": "user",
+      "msg": "3BHK"
+    },
+    {
+      "role": "agent",
+      "msg": "What is your budget?"
+    },
+    {
+      "role": "user",
+      "msg": "6000000"
+    },
+    {
+      "role": "agent",
+      "msg": "Would you like a sales rep call?"
+    },
+    {
+      "role": "user",
+      "msg": "Yes"
+    }
+  ],
+  "reason": "User meets all criteria"
+}

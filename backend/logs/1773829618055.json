@@ -1,0 +1,61 @@
+{
+  "status": "Not Qualified",
+  "propertyCount": 0,
+  "leadData": {
+    "name": "Rahul Sharma",
+    "location": "Delhi",
+    "type": "Residential",
+    "budget": "50 lakh",
+    "consent": "Yes"
+  },
+  "transcript": [
+    {
+      "role": "agent",
+      "msg": "Hello, am I speaking with Rahul Sharma?"
+    },
+    {
+      "role": "user",
+      "msg": "Yes"
+    },
+    {
+      "role": "agent",
+      "msg": "Which location are you searching in?"
+    },
+    {
+      "role": "user",
+      "msg": "Delhi"
+    },
+    {
+      "role": "agent",
+      "msg": "Residential or Commercial?"
+    },
+    {
+      "role": "user",
+      "msg": "Residential"
+    },
+    {
+      "role": "agent",
+      "msg": "Which BHK?"
+    },
+    {
+      "role": "user"
+    },
+    {
+      "role": "agent",
+      "msg": "What is your budget?"
+    },
+    {
+      "role": "user",
+      "msg": "50 lakh"
+    },
+    {
+      "role": "agent",
+      "msg": "Would you like a sales rep call?"
+    },
+    {
+      "role": "user",
+      "msg": "Yes"
+    }
+  ],
+  "reason": "Insufficient criteria"
+}
